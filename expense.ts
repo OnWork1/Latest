@@ -1,0 +1,40 @@
+import { type PaymentType } from '@prisma/client';
+import { type ExpenseType } from '@prisma/client';
+import { type Receipt } from './receipt';
+
+export interface Expense {
+  id?: number;
+  expenseTitle: string;
+  expenseType: ExpenseType;
+  expenseDate: string;
+  noOfPassengers?: number;
+  noOfLeaders?: number;
+  accountId: number;
+  currencyId?: number;
+  currencyCode?: string;
+  expenseCategoryId: number;
+  expenseCategory?: string;
+  paymentType?: PaymentType;
+  comment?: string;
+  taxId?: number;
+  taxCode?: string;
+  invoiceNumber?: string;
+  departmentId?: number;
+  departmentCode?: string;
+  status: string;
+  amount: number;
+  receipts?: Receipt[];
+  receiptCount?: number;
+  budgetedAmount?: number;
+  budgetedNoOfPax?: number;
+  budgetedNoOfLeaders?: number;
+  budgetedLeaderCost?: number;
+  budgetedPassengerCost?: number;
+  budgetedCurrencyId?: number;
+  budgetedCurrencyCode?: string;
+  files?: any;
+  expenseTransactionType?: string;
+  salesTaxGroupId?: number;
+  cacheId?: number;
+  clientStatus?: string;
+}
