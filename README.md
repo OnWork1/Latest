@@ -1,18 +1,43 @@
-# Layouts Folder
+# Pages Folder
 
-The "layouts" folder in this Nuxt 3 project contains layout components that define the overall structure of your web application. Layouts help you maintain consistency in your application's design by providing a framework for organizing different sections of your pages.
+The "pages" folder in this Nuxt 3 project contains the different page components that define the routes and views of your web application. Each file in this folder corresponds to a specific route in your application.
 
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [Available Layouts](#available-layouts)
+- [Available Pages](#available-pages)
+- [Usage](#usage)
 
 ## Introduction
 
-Layouts in Nuxt 3 serve as templates for your pages. They can include common elements such as headers, footers, navigation menus, or sidebars that should be consistent across multiple pages. This helps you avoid duplicating code and ensures a unified user experience.
+Pages in Nuxt 3 define the different routes and views of your web application. Each page component represents a unique route, and Nuxt automatically generates the routing configuration based on the files in this folder. This folder is a core part of your application's structure.
 
-This README provides an overview of the layouts available in this folder, their purposes, and how to use them in your project.
+This README provides an overview of the pages available in this folder, their purposes, and how to use them in your project.
 
-## Available Layouts
+## Available Pages
 
-List of available layouts.
+List of available pages.
+
+## Usage
+
+To create new pages or modify existing ones in your Nuxt 3 project, follow these steps:
+
+1. Locate the page file in this folder or create a new one.
+2. Define the page component by creating a `.vue` file with the required template, script, and style sections.
+3. Configure the routing in your project's configuration (typically in `nuxt.config.js`) if needed.
+
+Example page component structure:
+
+```vue
+<template>
+  <!-- Your page content goes here -->
+</template>
+
+<script setup lang="ts">
+<!-- Your page logic goes here -->
+</script>
+
+<style scoped lang="scss">
+/* Page-specific styles */
+</style>
+```

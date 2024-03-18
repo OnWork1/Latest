@@ -1,0 +1,375 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Brand {
+  id          Int       @id @default(autoincrement())
+  brandName   String
+  isActive    Boolean   @default(true)
+  createdBy   String
+  createdDate DateTime  @default(now())
+  updatedBy   String?
+  updatedDate DateTime?
+  deletedBy   String?
+  deletedDate DateTime?
+  Product     Product[]
+
+  @@map("brand")
+}
+
+model Tax {
+  id          Int       @id @default(autoincrement())
+  taxCode     String
+  taxRate     Decimal
+  isActive    Boolean   @default(true)
+  createdBy   String
+  createdDate DateTime  @default(now())
+  updatedBy   String?
+  updatedDate DateTime?
+  deletedBy   String?
+  deletedDate DateTime?
+  Budget      Budget[]
+  Expense     Expense[]
+
+  @@map("tax")
+}
+
+model Department {
+  id             Int       @id @default(autoincrement())
+  departmentName String
+  departmentCode String
+  isActive       Boolean   @default(true)
+  createdBy      String
+  createdDate    DateTime  @default(now())
+  updatedBy      String?
+  updatedDate    DateTime?
+  deletedBy      String?
+  deletedDate    DateTime?
+
+  Expense Expense[]
+  Budget  Budget[]
+
+  @@map("department")
+}
+
+model ExpenseCategory {
+  id                 Int         @id @default(autoincrement())
+  expenseName        String
+  expenseCode        String
+  defaultPaymentType PaymentType @default(CASH)
+  disablePaymentType Boolean     @default(false)
+  isActive           Boolean     @default(true)
+  createdBy          String
+  createdDate        DateTime    @default(now())
+  updatedBy          String?
+  updatedDate        DateTime?
+  deletedBy          String?
+  deletedDate        DateTime?
+  Expense            Expense[]
+  Budget             Budget[]
+
+  @@map("expense_category")
+}
+
+model Currency {
+  id           Int       @id @default(autoincrement())
+  currencyCode String
+  currencyName String
+  currencyRate Float
+  isActive     Boolean   @default(true)
+  createdBy    String
+  createdDate  DateTime  @default(now())
+  updatedBy    String?
+  updatedDate  DateTime?
+  deletedBy    String?
+  deletedDate  DateTime?
+
+  BudgetrdExpense Expense[] @relation("budgeted_currency_ref")
+  Expense         Expense[] @relation("expense_currency_ref")
+  Budget          Budget[]
+  Company         Company[]
+
+  @@map("currency")
+}
+
+model Company {
+  id             Int       @id @default(autoincrement())
+  companyCode    String
+  companyName    String
+  isActive       Boolean   @default(true)
+  createdBy      String
+  createdDate    DateTime  @default(now())
+  updatedBy      String?
+  updatedDate    DateTime?
+  deletedBy      String?
+  deletedDate    DateTime?
+  Product        Product[]
+  User           User[]
+  BaseCurrency   Currency  @relation(fields: [baseCurrencyId], references: [id])
+  baseCurrencyId Int
+
+  @@map("company")
+}
+
+model Product {
+  id          Int       @id @default(autoincrement())
+  productCode String
+  brandId     Int
+  companyId   Int
+  isActive    Boolean   @default(true)
+  createdBy   String
+  createdDate DateTime  @default(now())
+  updatedBy   String?
+  updatedDate DateTime?
+  deletedBy   String?
+  deletedDate DateTime?
+  duration    Int?
+  productName String
+  Accounts    Account[]
+  Budgets     Budget[]
+  Brand       Brand     @relation(fields: [brandId], references: [id])
+  Company     Company   @relation(fields: [companyId], references: [id])
+  Business    Business? @relation(fields: [businessId], references: [id])
+  businessId  Int?
+
+  @@map("product")
+}
+
+model Budget {
+  id                Int             @id @default(autoincrement())
+  dayNumber         Int?
+  expenseTitle      String
+  paymentType       PaymentType?
+  isActive          Boolean
+  version           Int             @default(1)
+  productId         Int
+  createdBy         String
+  createdDate       DateTime        @default(now())
+  updatedBy         String?
+  updatedDate       DateTime?
+  deletedBy         String?
+  deletedDate       DateTime?
+  expenseCode       String?
+  ExpenseCategory   ExpenseCategory @relation(fields: [expenseCategoryId], references: [id])
+  expenseCategoryId Int
+  Tax               Tax?            @relation(fields: [taxId], references: [id])
+  Department        Department?     @relation(fields: [departmentId], references: [id])
+  Currency          Currency?       @relation(fields: [currencyId], references: [id])
+  Product           Product         @relation(fields: [productId], references: [id])
+  Costs             Cost[]
+  taxId             Int?
+  departmentId      Int?
+  currencyId        Int?
+  SalesTaxGroup     SalesTaxGroup?  @relation(fields: [salesTaxGroupId], references: [id])
+  salesTaxGroupId   Int?
+
+  @@map("budget")
+}
+
+model Cost {
+  id                 Int       @id @default(autoincrement())
+  costType           CostType
+  sequence           Int       @default(1)
+  costAmount         Decimal?  @default(0.00)
+  baseCurrencyAmount Decimal?  @default(0.00)
+  baseCurrencyCode   String?
+  isActive           Boolean   @default(true)
+  createdBy          String
+  createdDate        DateTime  @default(now())
+  updatedBy          String?
+  updatedDate        DateTime?
+  deletedBy          String?
+  deletedDate        DateTime?
+  budgetId           Int
+  Budget             Budget    @relation(fields: [budgetId], references: [id])
+
+  @@map("cost")
+}
+
+model Account {
+  id             Int           @id @default(autoincrement())
+  tripCode       String
+  departureDate  DateTime      @map("departureDate")
+  noOfPassengers Int
+  noOfLeaders    Int
+  reviewerNotes  String?
+  accountStatus  AccountStatus
+  productId      Int
+  Leader         User?         @relation(fields: [leaderUserId], references: [id])
+  isActive       Boolean
+  createdBy      String
+  createdDate    DateTime      @default(now())
+  updatedBy      String?
+  updatedDate    DateTime?
+  deletedBy      String?
+  deletedDate    DateTime?
+  Product        Product       @relation(fields: [productId], references: [id])
+  Expense        Expense[]
+  leaderUserId   Int?
+
+  @@map("account")
+}
+
+//Used to track expenses done by leaders
+model Expense {
+  id                                Int                    @id @default(autoincrement())
+  expenseTitle                      String
+  expenseDate                       DateTime
+  noOfPassengers                    Int?                   @default(0)
+  noOfLeaders                       Int?                   @default(0)
+  currencyId                        Int?
+  budgetedCurrencyId                Int?
+  expenseCategoryId                 Int?
+  paymentType                       PaymentType?
+  comment                           String?
+  invoiceNumber                     String?
+  budgetedNoOfPax                   Int?                   @default(0)
+  budgetedNoOfLeaders               Int?                   @default(0)
+  budgetedLeaderCost                Decimal?               @default(0.00)
+  budgetedPassengerCost             Decimal?               @default(0.00)
+  budgetedBaseCurrencyLeaderCost    Decimal?               @default(0.00)
+  budgetedBaseCurrencyPassengerCost Decimal?               @default(0.00)
+  baseCurrencyCode                  String?
+  BudgetedCurrency                  Currency?              @relation("budgeted_currency_ref", fields: [budgetedCurrencyId], references: [id])
+  amount                            Decimal?               @default(0.00)
+  baseCurrencyAmount                Decimal?               @default(0.00)
+  departmentId                      Int?
+  status                            ExpenseStatus
+  isActive                          Boolean
+  createdBy                         String
+  createdDate                       DateTime               @default(now())
+  updatedBy                         String?
+  updatedDate                       DateTime?
+  deletedBy                         String?
+  deletedDate                       DateTime?
+  expenseTransactionType            ExpenseTransactionType @default(AUTO)
+  accountId                         Int
+  Currency                          Currency?              @relation("expense_currency_ref", fields: [currencyId], references: [id])
+  Department                        Department?            @relation(fields: [departmentId], references: [id])
+  ExpenseCategory                   ExpenseCategory?       @relation(fields: [expenseCategoryId], references: [id])
+  Receipt                           ReceiptInfo[]
+  Account                           Account                @relation(fields: [accountId], references: [id])
+  Tax                               Tax?                   @relation(fields: [taxId], references: [id])
+  taxId                             Int?
+  SalesTaxGroup                     SalesTaxGroup?         @relation(fields: [salesTaxGroupId], references: [id])
+  salesTaxGroupId                   Int?
+  expenseType                       ExpenseType?
+
+  @@map("expense")
+}
+
+model ReceiptInfo {
+  id            Int      @id @default(autoincrement())
+  fileName      String
+  fileExtension String
+  filePath      String
+  isActive      Boolean
+  createdBy     String
+  createdDate   DateTime @default(now())
+  Expense       Expense? @relation(fields: [expenseId], references: [id])
+  expenseId     Int?
+
+  @@map("receipt_info")
+}
+
+model User {
+  id          Int     @id @default(autoincrement())
+  userAccount String
+  cardCode    String?
+  cashCode    String?
+  isActive    Boolean
+
+  Company   Company @relation(fields: [companyId], references: [id])
+  companyId Int
+
+  createdBy   String
+  createdDate DateTime  @default(now())
+  updatedBy   String?
+  updatedDate DateTime?
+  deletedBy   String?
+  deletedDate DateTime?
+  Account     Account[]
+
+  @@map("user")
+}
+
+model SalesTaxGroup {
+  id                Int       @id @default(autoincrement())
+  salesTaxGroupCode String
+  isActive          Boolean
+  createdBy         String
+  createdDate       DateTime  @default(now())
+  updatedBy         String?
+  updatedDate       DateTime?
+  deletedBy         String?
+  deletedDate       DateTime?
+  Expense           Expense[]
+  Budget            Budget[]
+
+  @@map("sales_tax_group")
+}
+
+model Business {
+  id           Int       @id @default(autoincrement())
+  businessCode String
+  businessName String?
+  isActive     Boolean   @default(true)
+  createdBy    String
+  createdDate  DateTime  @default(now())
+  updatedBy    String?
+  updatedDate  DateTime?
+  deletedBy    String?
+  deletedDate  DateTime?
+  Product      Product[]
+
+  @@map("business")
+}
+
+enum PaymentType {
+  CASH
+  CARD
+
+  @@map("payment_type")
+}
+
+enum CostType {
+  PERSON
+  LEADER
+
+  @@map("cost_type")
+}
+
+enum AccountStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+
+  @@map("account_status")
+}
+
+enum ExpenseStatus {
+  DRAFT
+  CONFIRMED
+
+  @@map("expense_status")
+}
+
+enum ExpenseTransactionType {
+  AUTO
+  MANUAL
+
+  @@map("expense_transaction_type")
+}
+
+enum ExpenseType {
+  EXPENSE
+  WITHDRAWAL
+
+  @@map("expense_type")
+}
