@@ -1,17 +1,9 @@
-import ReceiptService from '~/server/services/receipt.service';
-import { receiptIdSchema } from '~/server/validation/receipt.zod';
+import AccountService from '~/server/services/account.service';
+import { accountIdSchema } from '~/server/validation/account.zod';
 import defineCustomEventHandler from '~/server/utils/custom-handler';
 
-export default defineEventHandler(async (event) => {
-  const service = new ReceiptService(event.context.auth.user);
-  const { id } = await getValidatedRouterParams(event, receiptIdSchema.parse);
-
-  const response = await service.getById(id);
-  const disposition = `attachment; filename="${response.fileName}"`;
-  const headerProperties: any = {
-    'Content-Disposition': disposition,
-    'Content-Type': 'application/octet-stream',
-  };
-  setResponseHeaders(event, headerProperties);
-  return sendStream(event, response.fileStream!);
+export default defineCustomEventHandler(async (event) => {
+  const service = new AccountService(event.context.auth.user);
+  const { id } = await getValidatedRouterParams(event, accountIdSchema.parse);
+  return await service.getById(id);
 });
