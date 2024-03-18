@@ -1,0 +1,123 @@
+@import '~/node_modules/primevue/resources/themes/lara-light-green/theme.css';
+@import '~/node_modules/primeicons/primeicons.css';
+
+* {
+  font-size: 0.9rem !important;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.watermark-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/logos/intrepid-background-image.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.05;
+  }
+}
+
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.content-container {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 4.625rem;
+  height: calc(100vh - 4.625rem);
+}
+
+.nav-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4.625rem;
+  padding: 1px;
+  z-index: 1000;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navigation {
+  text-decoration: none;
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+
+  &:hover {
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.side-navigation {
+  background-color: #151f28;
+}
+
+// datatables
+.p-datatable {
+  & .p-datatable-thead > tr > th {
+    background-color: black;
+    color: white;
+    font-weight: 500;
+  }
+
+  & .p-datatable-tbody > tr {
+    & > td {
+      padding: 0.5rem !important;
+    }
+
+    & > .p-editable-column {
+      padding: 0.8rem !important;
+    }
+  }
+}
+
+// inputs
+.p-inputtext {
+  padding: 0.6rem;
+}
+
+.p-input-icon-left > .p-inputtext {
+  padding-left: 2rem;
+}
+
+.p-input-icon-right > .p-inputtext {
+  padding-right: 2rem;
+}
+
+// dialog
+.p-dialog {
+  background: white;
+}
+
+.p-dialog-title {
+  font-size: 1.5rem !important;
+}
+
+// tabs
+.p-tabview-panels {
+  padding: 0 !important;
+}
