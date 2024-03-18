@@ -1,43 +1,35 @@
-# Pages Folder
+# Utils Folder
 
-The "pages" folder in this Nuxt 3 project contains the different page components that define the routes and views of your web application. Each file in this folder corresponds to a specific route in your application.
+The "utils" folder in this Nuxt 3 project contains utility functions and modules that enhance or simplify the functionality of your application. These utilities can be used across different parts of your project to improve code reusability and maintainability.
 
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [Available Pages](#available-pages)
+- [Available Utilities](#available-utilities)
 - [Usage](#usage)
 
 ## Introduction
 
-Pages in Nuxt 3 define the different routes and views of your web application. Each page component represents a unique route, and Nuxt automatically generates the routing configuration based on the files in this folder. This folder is a core part of your application's structure.
+The utilities in this folder serve various purposes, such as data formatting, validation, or commonly used functions that can be shared across different components, pages, or modules in your Nuxt 3 application.
 
-This README provides an overview of the pages available in this folder, their purposes, and how to use them in your project.
+This README provides an overview of the utilities available in this folder, their purposes, and how to use them in your project.
 
-## Available Pages
+## Available Utilities
 
-List of available pages.
+List of available utilities.
 
 ## Usage
 
-To create new pages or modify existing ones in your Nuxt 3 project, follow these steps:
+To use a utility in your Nuxt 3 project, follow these steps:
 
-1. Locate the page file in this folder or create a new one.
-2. Define the page component by creating a `.vue` file with the required template, script, and style sections.
-3. Configure the routing in your project's configuration (typically in `nuxt.config.js`) if needed.
+1. Locate the utility you want to use in this folder.
+2. Import the utility in your components, pages, or modules where it's needed.
+3. Utilize the utility functions or modules in your code as required.
 
-Example page component structure:
+```javascript
+// Example usage of a utility function
+import { utilityFunction } from '~/utils/utility-name';
 
-```vue
-<template>
-  <!-- Your page content goes here -->
-</template>
-
-<script setup lang="ts">
-<!-- Your page logic goes here -->
-</script>
-
-<style scoped lang="scss">
-/* Page-specific styles */
-</style>
+// Use the utility function
+const result = utilityFunction(someValue);
 ```
